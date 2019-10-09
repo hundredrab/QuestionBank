@@ -1,0 +1,9 @@
+git+https://github.com/jasperlittle/django-rest-framework-docs
+Django==2.2.5
+django-filter==2.2.0
+djangorestframework==3.10.3
+isort==4.3.21
+Markdown==3.1.1
+pysolr==3.8.1
+requests==2.22.0
+sqlparse==0.3.0
