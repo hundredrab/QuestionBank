@@ -127,3 +127,6 @@ dmypy.json
 # Undo and swap files for vim
 *.un~
 *.swp
+
+# Migrations
+*/migrations/*
