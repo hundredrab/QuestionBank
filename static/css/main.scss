@@ -1,0 +1,121 @@
+$bgDefault      : #4285f4;
+$bgHighlight    : #2c5ca8;
+$colDefault     : #ffffff;
+$colHighlight   : #fff;
+$dropDown       : true;
+.navbar-default {
+  background-color: $bgDefault;
+  border-color: $bgHighlight;
+  .navbar-brand {
+    color: $colDefault;
+    &:hover, &:focus {
+      color: $colHighlight; }}
+  .navbar-text {
+    color: $colDefault; }
+  .navbar-nav {
+    > li {
+      > a {
+        color: $colDefault;
+        &:hover,  &:focus {
+          color: $colHighlight; }}
+      @if $dropDown {
+        > .dropdown-menu {
+          background-color: $bgDefault;
+          > li {
+            > a {
+              color: $colDefault;
+              &:hover,  &:focus {
+                color: $colHighlight;
+                background-color: $bgHighlight; }}
+            &.divider {
+              background-color: $bgHighlight;}}}}}
+    > .active {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        background-color: $bgHighlight; }}
+    > .open {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        background-color: $bgHighlight; }}}
+  .navbar-toggle {
+    border-color: $bgHighlight;
+    &:hover, &:focus {
+      background-color: $bgHighlight; }
+    .icon-bar {
+      background-color: $colDefault; }}
+  .navbar-collapse,
+  .navbar-form {
+    border-color: $colDefault; }
+  .navbar-link {
+    color: $colDefault;
+    &:hover {
+      color: $colHighlight; }}}
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu {
+    > li > a {
+      color: $colDefault;
+      &:hover, &:focus {
+        color: $colHighlight; }}
+    > .active {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        background-color: $bgHighlight; }}}
+}
+
+main {
+  #status {
+    margin-bottom: 20px;
+  }
+
+  #results {
+    .card {
+      height: 300px;
+      //border: 2px solid blue;
+      //background-color: yellow;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      position:relative;
+
+      .card-header {
+        max-height: 40%;
+        overflow:hidden;
+        padding-top:20px;
+      
+        .img {
+          height: 100%;
+        }
+        .title {
+          font-size: 18px;
+        }
+      }
+      
+      .card-body {
+        margin-top: 10px;
+        overflow: hidden;
+      }
+
+      .card-footer {
+        position:absolute;
+        bottom: 0px;
+        width: 96%;
+        height: 30%;
+        vertical-align: bottom;
+        background-color: skyblue;
+        margin: 2%;
+        border-radius: 6px;
+
+        .v-space {
+            height: 10%;
+        }
+        img {
+            height: 60%;
+            margin: auto;
+        }
+        .see-more {
+            text-align: center;
+            font-weight: bold;
+        }
+      }
+    }
+  }
+}
