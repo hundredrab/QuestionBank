@@ -12,6 +12,8 @@ urlpatterns = [
     path('tags', views.TagList.as_view()),
     path('tag', views.TagTreeView.as_view()),
     path('upload', views.UploadQuestions.as_view()),
+    path('api/set/<int:pk>',
+         views.QuestionSetDetailAPI.as_view(), name='question_paper_details'),
     path('paper/details/<int:pk>',
          views.QuestionPaperDetail.as_view(), name='question_paper_details'),
     path('paper/<int:pk>/add', views.AddQuestionToPaper.as_view(),

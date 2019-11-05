@@ -6,9 +6,9 @@ from django.views.generic.list import ListView
 from rest_framework import generics
 
 from .forms import QuestionForm
-from .models import Question, QuestionPaper, Tag
+from .models import Question, QuestionPaper, Tag, QuestionSet
 from .serializers import (QuestionPaperSerializer, QuestionSerializer,
-                          TagSerializer, TagTree)
+                          TagSerializer, TagTree, QuestionSetSerializer)
 
 
 class QuestionList(generics.ListCreateAPIView):
@@ -99,10 +99,10 @@ class QuestionPaperDetail(DetailView):
     model = QuestionPaper
 
 
-class QuestionPaperDetailAPI(generics.RetrieveUpdateAPIView):
+class QuestionSetDetailAPI(generics.RetrieveUpdateAPIView):
     """Get or update a specific question, retrieved by ID."""
-    serializer_class = QuestionPaperSerializer
-    queryset = QuestionPaper.objects.all()
+    serializer_class = QuestionSetSerializer
+    queryset = QuestionSet.objects.all()
 
 
 class AddQuestionToPaper(View):
@@ -121,4 +121,8 @@ class AddQuestionToPaper(View):
 
 class SearchView(View):
     def get(self, request, pk):
-        return render(request, 'questions/index.html')
+        qset, created = QuestionSet.objects.get_or_create(pk=pk)
+        context = {
+            'qset': qset,
+        }
+        return render(request, 'questions/index.html', context)

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import QuestionPaper, Question, Tag
+from .models import QuestionPaper, Question, Tag, QuestionSet
 
 class QuestionSerializer(serializers.ModelSerializer):
     """Serializer for Question model."""
@@ -15,6 +15,15 @@ class QuestionPaperSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuestionPaper
+        fields = '__all__'
+
+
+class QuestionSetSerializer(serializers.ModelSerializer):
+    """Serializer for Question Paper model."""
+    questions = QuestionSerializer(many=True)
+
+    class Meta:
+        model = QuestionSet
         fields = '__all__'
 
 
