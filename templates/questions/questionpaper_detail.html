@@ -1,0 +1,87 @@
+{% extends 'questions/base.html' %}
+{% block styles %}
+<style type="text/css" media="screen">
+html, body {
+    height: 99.5%;
+}
+main {
+    height: 95%}
+
+#left {
+    overflow: scroll;
+    height: 100%;
+}
+
+#top {
+    margin-top: 10px;
+}
+
+#right {
+    height: 100%;
+}
+#right #bottom {
+    overflow: scroll;
+    max-height: 75%;
+}
+#selector {
+    z-index: 50;
+    position: fixed;
+    top: 50%;
+    right: 51%;
+    border-radius: 50%;
+    padding: 8px;
+    background: rgba(76, 175, 80, 0.8)
+}
+</style>
+{% endblock %}
+{% block content %}
+<button id="selector" class="btn" onclick=selection()>
+    <img src="https://icons-for-free.com/iconfiles/png/512/keyboard+arrow+right+24px-131985225827089442.png" height=30 width=30>
+</button>
+<div class="col-sm-6 col-md-6" id="left">
+    {{ object.text | linebreaks | safe }}
+</div>
+
+<div class="col-sm-6 col-md-6" id="right">
+    <div id=top>
+        <form method="POST" action="/question/paper/{{ object.id }}/add">
+            {% csrf_token %}
+            <textarea id="question_sel" cols=60 rows=7 name="text"/>
+            </textarea>
+            <br><br>
+            <button type="submit" class="btn btn-success" id="add-button">Add</button>
+        </form>
+    </div>
+    <div id=bottom>
+        <b>{{ object.questions.count }} questions{{ questions | pluralize}}</b> extracted.
+
+        <br>
+        {% for question in object.questions.all %}
+        {{ question.text | linebreaks | safe }}
+        <br>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $( document ).ready(function() {
+        $('#add-button').hide()
+    })
+    function selection(){
+        p = window.getSelection().toString()
+        if(p)
+        {
+            document.getElementById('question_sel').value = p
+            $('#add-button').show()
+        }
+        else
+        {
+            document.getElementById('question_sel').value = ""
+            $('#add-button').hide()
+        }
+
+    }
+</script>
+{% endblock %}
