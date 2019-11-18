@@ -66,20 +66,15 @@ main {
 
 {% block scripts %}
 <script>
-    $( document ).ready(function() {
-        $('#add-button').hide()
-    })
     function selection(){
         p = window.getSelection().toString()
         if(p)
         {
             document.getElementById('question_sel').value = p
-            $('#add-button').show()
         }
         else
         {
             document.getElementById('question_sel').value = ""
-            $('#add-button').hide()
         }
 
     }

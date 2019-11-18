@@ -16,12 +16,14 @@
         <button type="submit">Submit</button>
     </form>
 
-    Before uploading, make sure you're not uploading one of these:
+    Before uploading, make sure you're not uploading one of the already available papers:
     <br>
     <br>
 
     {% for paper in papers %}
     <a href="{{ paper.get_absolute_url }}">{{ paper.file.name }}</a>
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    <small>[<a href="{{ paper.file.url }}">Get file</a>]</small>
     <div class="paper_text">{{ paper.text | truncatewords:50 }}
     </div>
     {% endfor %}
