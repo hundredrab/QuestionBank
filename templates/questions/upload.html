@@ -1,0 +1,31 @@
+{% extends 'questions/base.html' %}
+{% block styles %}
+<style>
+.paper_text{
+    margin-left: 50px;
+    margin-bottom: 20px;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+
+    Before uploading, make sure you're not uploading one of the already available papers:
+    <br>
+    <br>
+
+    {% for paper in papers %}
+    <a href="{{ paper.get_absolute_url }}">{{ paper.file.name }}</a>
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    <small>[<a href="{{ paper.file.url }}">Get file</a>]</small>
+    <div class="paper_text">{{ paper.text | truncatewords:50 }}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
