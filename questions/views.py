@@ -1,14 +1,18 @@
 import fitz
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .forms import QuestionForm
-from .models import Question, QuestionPaper, Tag, QuestionSet
+from .models import Question, QuestionPaper, QuestionSet, Tag
 from .serializers import (QuestionPaperSerializer, QuestionSerializer,
-                          TagSerializer, TagTree, QuestionSetSerializer)
+                          QuestionSetSerializer, TagSerializer, TagTree)
 
 
 class QuestionList(generics.ListCreateAPIView):
@@ -36,11 +40,21 @@ class QuestionList(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = Question.objects.all()
         search_text = self.request.query_params.get('text', None)
-        # tag = self.request.query_params.get('tag', None)
+        whitelist = self.request.query_params.get('whitelist', None)
+        blacklist = self.request.query_params.get('blacklist', None)
+        print(blacklist, ', blacklist')
         if search_text is not None:
             queryset = queryset.filter(text__contains=search_text)
-        # if tag is not None:
-            # queryset = queryset.filter(tag_id=tag)
+        if whitelist:
+            whitelist = [tag.strip() for tag in whitelist.split(',')]
+            for tag in whitelist:
+                queryset = queryset.filter(tags__name=tag)
+        if blacklist:
+            print(blacklist, '......')
+            blacklist = [tag.strip() for tag in blacklist.split(',')]
+            for tag in blacklist:
+                print(blacklist, tag)
+                queryset = queryset.exclude(tags__name=tag)
         return queryset
 
 
@@ -62,10 +76,13 @@ class TagTreeView(generics.ListAPIView):
     queryset = Tag.objects.filter(name='science')
 
 
-class UploadQuestions(View):
+class UploadQuestions(LoginRequiredMixin, View):
     """Upload a question paper, and then redirect the user to the page
     associated with the question paper."""
+    login_url = '/accounts/login'
     def get(self, request):
+        print(request.user)
+        print(request.user.is_authenticated)
         form = QuestionForm()
         context = {
             'form': form,
@@ -109,6 +126,8 @@ class AddQuestionToPaper(View):
     """Adds a question to a question paper."""
     def post(self, request, pk):
         text = request.POST['text']
+        difficulty = request.POST.get('difficulty')
+        tags = request.POST.get('tags')
         print(text)
         paper = QuestionPaper.objects.get(pk=pk)
         if request.user.is_authenticated:
@@ -126,3 +145,15 @@ class SearchView(View):
             'qset': qset,
         }
         return render(request, 'questions/index.html', context)
+
+class AddQuestionToSet(APIView):
+    def get(self, request, pk, **kwargs):
+        qset = QuestionSet.objects.get(pk=pk)
+        print(pk)
+        qpk = self.request.query_params.get('qpk')
+        print(qpk)
+        ques = Question.objects.get(pk=qpk)
+        print(ques)
+        qset.questions.add(ques)
+        qset.save()
+        return Response("Success", 200)

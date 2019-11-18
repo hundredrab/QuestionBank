@@ -19,4 +19,5 @@ urlpatterns = [
     path('paper/<int:pk>/add', views.AddQuestionToPaper.as_view(),
          name='add_question_to_paper'),
     path('search/<int:pk>', views.SearchView.as_view(), name='search_view'),
+    path('add_to_qset/<int:pk>', views.AddQuestionToSet.as_view(), name='add_to_qset'),
 ]

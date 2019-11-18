@@ -41,17 +41,47 @@ var app = new Vue({
         questions: [],
         text: [],
         status: "",
-        paper: "",
+        whitelist: "",
+        blacklist: "",
     },
     watch: {
         text: function(){
             this.populateRes()
-            show.populateQset()
+            //show.populateQset()
+        },
+        whitelist: function(){
+            this.populateRes()
+            //show.populateQset()
+        },
+        blacklist: function(){
+            this.populateRes()
+            //show.populateQset()
         }
     },
     methods: {
-        addToSet: function(){
-            alert("I'll add this question to the set on the right via an api call.")
+        addToSet: function(qid){
+            var app = this
+            axios.get(
+                "http://127.0.0.1:8000/question/add_to_qset/"+(id), {
+                    params: {
+                        qpk: qid,
+                    }
+                }
+            ).then(function (response) {
+                console.log(response.data)
+                show.populateQset()
+            }).catch(function(error) {
+                console.log(error)
+                if(error.response){
+                    console.log(error.response)
+                    //console.log(error.response.status)
+                    //console.log(error.response.headers)
+                    //alert(error.response.data.message['__all__'])
+                }
+                else{
+                    alert("An error occured.")
+                }
+            })
         },
         populateRes: _.debounce(function(){
             var app = this
@@ -60,7 +90,8 @@ var app = new Vue({
                 "http://127.0.0.1:8000/question/", {
                     params: {
                         text: app.text,
-                        tag: 2,
+                        whitelist: app.whitelist,
+                        blacklist: app.blacklist,
                     }
                 }
             ).then(function (response) {
