@@ -14,7 +14,7 @@ class Tag(models.Model):
 
 class QuestionPaper(models.Model):
     """Model for storing Question paper file and related info."""
-    file = models.FileField(upload_to='papers',
+    file = models.FileField(upload_to='media/papers',
                             blank=True, null=True)
     text = models.TextField(blank=True, null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
