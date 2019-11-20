@@ -141,8 +141,10 @@ class AddQuestionToPaper(View):
 class SearchView(View):
     def get(self, request, pk):
         qset, created = QuestionSet.objects.get_or_create(pk=pk)
+        root = Tag.objects.get(name='root')
         context = {
             'qset': qset,
+            'root': root,
         }
         return render(request, 'questions/index.html', context)
 

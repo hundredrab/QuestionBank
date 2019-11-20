@@ -1,0 +1,9 @@
+{% for tag in tag_list %}
+<div style="padding-left: 8px;" onMouseOver="this.style.border='1px solid blue'" onMouseOut="this.style.border=''" tagName="{{ tag.name }}" class="nocare">
+  {{ tag.name }}
+  {% if tag.children.all %}
+    <span class="hider">(hide)</span>
+    {% include "questions/tag.html" with tag_list=tag.children.all %}
+  {% endif %}
+  </div>
+{% endfor %}
