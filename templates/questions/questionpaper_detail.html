@@ -2,81 +2,167 @@
 {% block styles %}
 <style type="text/css" media="screen">
 html, body {
-    height: 99.5%;
+  height: 99.5%;
 }
 main {
-    height: 95%}
+  height: 95%}
 
 #left {
-    overflow: scroll;
-    height: 100%;
+  overflow: scroll;
+  height: 100%;
 }
 
 #top {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 #right {
-    height: 100%;
+  height: 100%;
 }
 #right #bottom {
-    overflow: scroll;
-    max-height: 75%;
+  overflow: scroll;
+  max-height: 75%;
 }
 #selector {
-    z-index: 50;
-    position: fixed;
-    top: 50%;
-    right: 51%;
-    border-radius: 50%;
-    padding: 8px;
-    background: rgba(76, 175, 80, 0.8)
+  z-index: 50;
+  position: fixed;
+  top: 50%;
+  right: 51%;
+  border-radius: 50%;
+  padding: 8px;
+  background: rgba(76, 175, 80, 0.8)
 }
+
+.hider {
+  font-size: 10px;
+  float: right;
+}
+
+div.hid {
+  display: none;
+}
+
+div.nocare {
+  background: white;
+}
+
+div.selected {
+  background: lightgreen;
+}
+
+#taglist .nocare:hover {
+  background: rgba(0,0,0,0.06);
+}
+
 </style>
 {% endblock %}
 {% block content %}
 <button id="selector" class="btn" onclick=selection()>
-    <img src="https://icons-for-free.com/iconfiles/png/512/keyboard+arrow+right+24px-131985225827089442.png" height=30 width=30>
+  <img src="https://icons-for-free.com/iconfiles/png/512/keyboard+arrow+right+24px-131985225827089442.png" height=30 width=30>
 </button>
-<div class="col-sm-6 col-md-6" id="left">
-    {{ object.text | linebreaks | safe }}
+<div class="col-sm-5 col-md-5" id="left">
+  {{ object.text | linebreaks | safe }}
 </div>
 
-<div class="col-sm-6 col-md-6" id="right">
-    <div id=top>
-        <form method="POST" action="/question/paper/{{ object.id }}/add">
-            {% csrf_token %}
-            <textarea id="question_sel" cols=60 rows=7 name="text"/>
-            </textarea>
-            <br><br>
-            <button type="submit" class="btn btn-success" id="add-button">Add</button>
-        </form>
-    </div>
-    <div id=bottom>
-        <b>{{ object.questions.count }} questions{{ questions | pluralize}}</b> extracted.
+<div class="col-sm-5 col-md-5" id="right">
+  <div id=top>
+    <form method="POST" action="/question/paper/{{ object.id }}/add">
+      {% csrf_token %}
+      <textarea id="question_sel" cols=60 rows=7 name="text"/>
+      </textarea>
+      <label> Tags: <input id="taglist" type="text" name="tags"></label>
+      <br>
+      <button type="submit" class="btn btn-success" id="add-button">Add</button>
+    </form>
+  </div>
+  <div id=bottom>
+    <b>{{ object.questions.count }} questions{{ questions | pluralize}}</b> extracted.
 
-        <br>
-        {% for question in object.questions.all %}
-        {{ question.text | linebreaks | safe }}
-        <br>
-        {% endfor %}
-    </div>
+    <br>
+    {% for question in object.questions.all %}
+    {{ question.text | linebreaks | safe }}
+    <br>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="taglist" class="col-sm-2">
+  {% include "questions/tag.html" with tag_list=root.children.all %}
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    function selection(){
-        p = window.getSelection().toString()
-        if(p)
-        {
-            document.getElementById('question_sel').value = p
-        }
-        else
-        {
-            document.getElementById('question_sel').value = ""
-        }
 
+    tl = $('#taglist')
+  $(document).ready(function(){
+    tl.val("{{ object.tag_str }}")
+    var str = "{{ object.tag_str }}"
+    str.split(",").map(function(item){
+      item = item.trim()
+      if(item.length){
+        $('div[tagName="'+item+'"]').addClass('selected')
+        $('div[tagName="'+item+'"]').removeClass('nocare')
+      }
+      return null
+    })
+
+  })
+    
+
+
+  $('.hider').click(function(e){
+    e.stopPropagation()
+    $(this).parent().children().toggleClass('hid')
+    this.innerHTML = this.innerHTML == '(show)' ? '(hide)' : '(show)'
+  })
+
+  function selection(){
+    p = window.getSelection().toString()
+    if(p) {
+      document.getElementById('question_sel').value = p
     }
+    else {
+      document.getElementById('question_sel').value = ""
+    }
+  }
+
+
+  function removeSel(ell){
+    tag = ell.getAttribute('tagName')
+    $(ell).removeClass('selected')
+    $(ell).addClass('nocare')
+    curr = tl.val()
+    curr = curr.replace(tag, "");
+    curr = curr.replace(", ,", ",");
+    tl.val(curr)
+    $(ell).children('.selected').each(function(i, val) {
+      removeSel(val)
+    })
+  }
+
+  $('#taglist div').click(function(e){
+    tag = this.getAttribute('tagName');
+    if (this.className == 'nocare')
+    {
+      $(this).removeClass('nocare')
+      $(this).addClass('selected')
+      curr = tl.val()
+      if (curr.length>0)
+        curr += ', '
+      curr += tag
+      curr = curr.replace(", ,", ",")
+      tl.val(curr)
+      if ($(this).parent().hasClass('selected'))
+        e.stopPropagation()
+    }
+    else if (this.className == 'selected'){
+      e.stopPropagation()
+      removeSel(this)
+    }
+    else {
+      alert("something went wrong")
+    }
+  });
 </script>
 {% endblock %}

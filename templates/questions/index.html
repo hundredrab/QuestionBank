@@ -30,6 +30,11 @@ Question Set {{ qset.id }}
 div.hid {
   display: none;
 }
+
+#taglist .nocare:hover {
+  background: rgba(0,0,0,0.06);
+}
+
 </style>
 {% endblock %}
 {% block content %}
@@ -43,8 +48,8 @@ div.hid {
 
     <form class="form-group">
       <input class="form-control" placeholder="Search for questions." v-model="text">
-      <input class="form-control" placeholder="Add tags to search" id="whitelist" v-model="whitelist">
-      <input class="form-control" placeholder="Blacklist tags to not search in" id="blacklist" v-model="blacklist">
+      <input class="form-control" placeholder="Add tags to search" id="whitelist" v-model="whitelist" readonly=True>
+      <input class="form-control" placeholder="Blacklist tags to not search in" id="blacklist" v-model="blacklist" readonly=True>
     </form>
     <div id="status" class="name">
       {{ status }}
@@ -65,7 +70,7 @@ div.hid {
   <div class="col-sm-5">
     <div id="show">
       {% verbatim %}
-      Question set {{ qset.id }} of marks {{ qset.total_marks }} curently has {{ qset.questions.length }} question(s).
+      Question set {{ qset.id }} currently has {{ qset.questions.length }} question(s).
       <div class="question" v-for="question in qset.questions">
         <br>
         <br>

@@ -1,3 +1,6 @@
+"""
+Models for the question app.
+"""
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
@@ -11,6 +14,9 @@ class Tag(models.Model):
                                on_delete=models.SET_NULL,
                                null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class QuestionPaper(models.Model):
     """Model for storing Question paper file and related info."""
@@ -20,8 +26,10 @@ class QuestionPaper(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.SET_NULL,
                               null=True, blank=True)
+    tag_str = models.TextField(blank=True, null=True)
 
     def get_absolute_url(self):
+        """Returns absolute url of the question paper."""
         return reverse('questions:question_paper_details', args=[self.id])
 
 
@@ -53,5 +61,9 @@ class QuestionSet(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.SET_NULL,
                               null=True, blank=True)
+    name = models.CharField(max_length=30, blank=True, null=True)
+    passcode = models.CharField(max_length=5, blank=True, null=True)
+    start_time = models.DateTimeField(blank=True, null=True)
+    end_time = models.DateTimeField(blank=True, null=True)
     questions = models.ManyToManyField(Question)
     total_marks = models.PositiveIntegerField(default=100)
