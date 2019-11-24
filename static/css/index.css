@@ -10,7 +10,10 @@ main {
   position: relative;
   width: 100%;
   height: 94vh;
-  background-size: cover; }
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat; }
   .cover .overlay {
     position: absolute;
     top: 0;
@@ -18,7 +21,7 @@ main {
     width: 100%; }
     .cover .overlay .target {
       width: 50%;
-      border: 9px dashed white;
+      border: 1px dashed white;
       height: 100%;
       text-align: center;
       padding-top: 35vh; }
@@ -52,12 +55,10 @@ main {
             color: black; }
 
 #top {
-  margin-top: -20vh;
-  height: 120vh;
+  height: 100vh;
   background-image: url("https://images.unsplash.com/photo-1438012940875-4bf705025a8a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80");
   filter: sepia(100%); }
   #top #title {
-    margin-top: 21vh;
     filter: none;
     padding-top: 35vh;
     text-align: center;
