@@ -23,4 +23,7 @@ urlpatterns = [
     path('search/<int:pk>',
          views.SearchView.as_view(),
          name='search_view'),
+    path('set/',
+         views.QuestionSetCreate.as_view(),
+         name='set_create'),
 ]

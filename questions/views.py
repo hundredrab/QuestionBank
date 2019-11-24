@@ -7,6 +7,7 @@ from django.shortcuts import redirect, render
 from django.utils.crypto import get_random_string
 from django.views import View
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
 
 from .forms import QuestionForm
 from .models import Question, QuestionPaper, QuestionSet, Tag
@@ -70,7 +71,7 @@ class QuestionPaperDetail(DetailView): # pylint: disable=too-many-ancestors
 class AddQuestionToPaper(View):
     """Adds a question to a question paper."""
 
-    def post(self, request, p_key):
+    def post(self, request, pk):
         """Handle post method.
 
         Add a question to the database, and assign a paper to it.
@@ -79,7 +80,7 @@ class AddQuestionToPaper(View):
         difficulty = request.POST.get('difficulty')
         # TODO: Handle difficulty/marks in both form and here
         tags = request.POST.get('tags')
-        paper = QuestionPaper.objects.get(pk=p_key)
+        paper = QuestionPaper.objects.get(pk=pk)
         paper.tag_str = tags
         paper.save()
         if request.user.is_authenticated:
@@ -103,9 +104,9 @@ class SearchView(LoginRequiredMixin, View):
 
     User can search for questions and add them into the set here.
     """
-    def get(self, request, p_key):
+    def get(self, request, pk):
         """Handles get method."""
-        qset, _ = QuestionSet.objects.get_or_create(pk=p_key, defaults={
+        qset, _ = QuestionSet.objects.get_or_create(pk=pk, defaults={
             'owner': self.request.user if (
                 self.request.user.is_authenticated
             ) else None,
@@ -117,6 +118,14 @@ class SearchView(LoginRequiredMixin, View):
             'root': root,
         }
         if qset.owner == self.request.user:
-            return render(request, 'questions/index.html', context)
+            pass
+        return render(request, 'questions/index.html', context)
         # TODO: Handle user not having permissions.
         return None
+
+class QuestionSetCreate(LoginRequiredMixin, CreateView): # pylint: disable=too-many-ancestors
+    """
+    Allow users to init question set creation.
+    """
+    model = QuestionSet
+    fields = ['name', 'passcode', 'start_time', 'end_time']

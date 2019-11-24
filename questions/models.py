@@ -67,3 +67,7 @@ class QuestionSet(models.Model):
     end_time = models.DateTimeField(blank=True, null=True)
     questions = models.ManyToManyField(Question)
     total_marks = models.PositiveIntegerField(default=100)
+
+    def get_absolute_url(self):
+        """Returns canonical url or the Question set."""
+        return reverse('questions:search_view', args=[self.id])
