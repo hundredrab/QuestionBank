@@ -94,10 +94,10 @@ div.selected {
 {% block scripts %}
 <script>
 
-    tl = $('#taglist')
+  tl = $('#taglist')
   $(document).ready(function(){
-    tl.val("{{ object.tag_str }}")
-    var str = "{{ object.tag_str }}"
+    var str = {% if object.tag_str %} "{{ object.tag_str }}" {% else %} "" {% endif %}
+    tl.val(str)
     str.split(",").map(function(item){
       item = item.trim()
       if(item.length){
@@ -108,7 +108,7 @@ div.selected {
     })
 
   })
-    
+
 
 
   $('.hider').click(function(e){

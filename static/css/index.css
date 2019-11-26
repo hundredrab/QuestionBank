@@ -32,12 +32,12 @@ main {
       width: 50%;
       height: 100%;
       padding: 2vh;
-      font-size: 25px;
+      font-size: 20px;
       font-family: 'Playfair Display', serif;
       color: white; }
       .cover .overlay .features ul {
         margin: auto;
-        margin-top: 30%; }
+        margin-top: 20%; }
         .cover .overlay .features ul li {
           margin: 100px 20px; }
       .cover .overlay .features .started_parent {
