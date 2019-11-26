@@ -26,7 +26,13 @@ class Tag(models.Model):
 
 
 class QuestionPaper(models.Model):
-    """Model for storing Question paper file and related info."""
+    """
+    Model for storing Question paper file and related info.
+
+    On upload, the question paper is parsed using fitz and the raw text thus
+    extracted is stored with the question paper. The uploader can go through
+    the raw text and select certain questions from it.
+    """
     file = models.FileField(upload_to='media/papers',
                             blank=True, null=True)
     text = models.TextField(blank=True, null=True)
@@ -41,7 +47,14 @@ class QuestionPaper(models.Model):
 
 
 class Question(models.Model):
-    """Model for storing each question and related info."""
+    """
+    Model for storing each question and related info.
+
+    This stores information related to a question, such as the question text,
+    tags related to it, it's owner, and also it's difficulty, which an integer,
+    which is an indicator of how much marks should be awarded for the given
+    question.
+    """
     text = models.TextField(blank=True, null=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.SET_NULL,
