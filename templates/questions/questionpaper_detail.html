@@ -1,4 +1,7 @@
 {% extends 'questions/base.html' %}
+{% block title %}
+Question Paper
+{% endblock %}
 {% block styles %}
 <style type="text/css" media="screen">
 html, body {
@@ -27,7 +30,7 @@ main {
   z-index: 50;
   position: fixed;
   top: 50%;
-  right: 51%;
+  right: 58%;
   border-radius: 50%;
   padding: 8px;
   background: rgba(76, 175, 80, 0.8)
@@ -53,6 +56,19 @@ div.selected {
 #taglist .nocare:hover {
   background: rgba(0,0,0,0.06);
 }
+.question {
+  background: rgb(230,230,230);
+}
+.tags {
+  margin-top: -10px;
+}
+.tag{
+  padding: 1px 1px;
+  text-align: center;
+  float:right;
+  border: 1px dashed gray;
+  margin-right: 5px;
+}
 
 </style>
 {% endblock %}
@@ -71,6 +87,7 @@ div.selected {
       <textarea id="question_sel" cols=60 rows=7 name="text"/>
       </textarea>
       <label> Tags: <input id="taglist" type="text" name="tags"></label>
+      <label> Difficulty: <input id="difficulty" type="text" name="difficulty"></label>
       <br>
       <button type="submit" class="btn btn-success" id="add-button">Add</button>
     </form>
@@ -80,9 +97,33 @@ div.selected {
 
     <br>
     {% for question in object.questions.all %}
-    {{ question.text | linebreaks | safe }}
+    <div class="question">
+      {{ question.text | linebreaks | safe }}
+    </div>
+    <div class="tags row">
+      {% for tag in question.tags.all %}
+      <div class="tag col-sm-2">
+        {{ tag }}
+      </div>
+      {% endfor %}
+      <a href="{% url 'questions:delete_q'  question.id %}">
+        <div class="btn btn-danger tag delete col-sm-2">
+          Delete
+        </div>
+      </a>
+      {% if question.difficulty %}
+      <div class="btn btn-info tag col-sm-1">
+        {{ question.difficulty }}
+      </div>
+      {% endif %}
+    </div>
     <br>
     {% endfor %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
   </div>
 </div>
 

@@ -1,19 +1,27 @@
 {% extends 'questions/base.html' %}
 
 {% block title %}
-  My Sets
+My Sets
 {% endblock %}
 {% block content %}
 <div class="container">
   {% for set in object_list %}
-  <div>
-    <a href="{{ set.get_absolute_url }}">
-      {% if set.name %}
+  <div class="row">
+    <div class="col-sm-2">
+      <a href="{{ set.get_absolute_url }}">
+        {% if set.name %}
         {{ set.name }}
-      {% else %}
+        {% else %}
         Unnamed set
-      {% endif %}
-    </a>
+        {% endif %}
+      </a>
+    </div>
+    <div class="col-sm-2">
+      contains <b>{{ set.questions.all.count }}</b> question{{ set.questions.all|pluralize }}
+    </div>
+    <div class="col-sm-2">
+      <a href="{% url 'questions:set_detail' set.id  set.passcode %}">Public link</a>
+    </div>
   </div>
   {% endfor %}
 </div>

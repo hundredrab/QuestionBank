@@ -4,10 +4,11 @@ Web views for the Question app.
 import fitz
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.utils.crypto import get_random_string
 from django.views import View
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView
 from django.views.generic.list import ListView
 
 from .forms import QuestionForm
@@ -94,6 +95,8 @@ class AddQuestionToPaper(View):
         for tag in tags:
             tag_obj = Tag.objects.get(name=tag)
             question.tags.add(tag_obj)
+        if difficulty:
+            question.difficulty = difficulty
         question.save()
 
         return redirect(paper.get_absolute_url())
@@ -162,3 +165,10 @@ class QuestionSetList(ListView): # pylint: disable=too-many-ancestors
 
     def get_queryset(self):
         return self.model.objects.filter(owner=self.request.user)
+
+class QuestionDelete(DeleteView): # pylint: disable=too-many-ancestors
+    """
+    Deletes a question and redirects to home.
+    """
+    model = Question
+    success_url = reverse_lazy('home')

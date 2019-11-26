@@ -32,4 +32,7 @@ urlpatterns = [
     path('sets/',
          views.QuestionSetList.as_view(),
          name='set_list'),
+    path('<int:pk>/delete',
+         views.QuestionDelete.as_view(),
+         name='delete_q'),
 ]
