@@ -61,10 +61,14 @@ class QuestionSet(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               on_delete=models.SET_NULL,
                               null=True, blank=True)
-    name = models.CharField(max_length=30, blank=True, null=True)
-    passcode = models.CharField(max_length=5, blank=True, null=True)
-    start_time = models.DateTimeField(blank=True, null=True)
-    end_time = models.DateTimeField(blank=True, null=True)
+    name = models.CharField(max_length=30, blank=True, null=True,
+                            help_text="Enter a name of your choice")
+    passcode = models.CharField(max_length=5, blank=True, null=True, 
+                                help_text="Use this if you want this to be accesssible to only people who have this passcode.")
+    start_time = models.DateTimeField(blank=True, null=True,
+                                      help_text="Use this if you want this to be accessible only after a certain time.")
+    end_time = models.DateTimeField(blank=True, null=True,
+                                    help_text="Use this if you want this set to be accessible only until a certain time.")
     questions = models.ManyToManyField(Question)
     total_marks = models.PositiveIntegerField(default=100)
 
