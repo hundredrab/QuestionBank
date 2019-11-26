@@ -73,9 +73,9 @@ class QuestionSetDetailAPI(generics.RetrieveUpdateAPIView):
 
 class AddQuestionToSet(APIView):
     """Add a question to set, as called from the set detail view."""
-    def get(self, request, p_key, **kwargs):
+    def get(self, request, pk, **kwargs):
         """Handle get method."""
-        qset = QuestionSet.objects.get(pk=p_key)
+        qset = QuestionSet.objects.get(pk=pk)
         qpk = self.request.query_params.get('qpk')
         ques = Question.objects.get(pk=qpk)
         qset.questions.add(ques)
