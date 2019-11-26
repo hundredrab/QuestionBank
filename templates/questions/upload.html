@@ -11,7 +11,7 @@
 <div class="container">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
+        <label for="id_file">File:</label><input type="file" name="file" id="id_file" required=True>
         <br>
         <button type="submit">Submit</button>
     </form>
@@ -21,9 +21,11 @@
     <br>
 
     {% for paper in papers %}
+    {% if paper.file %}
     <a href="{{ paper.get_absolute_url }}">{{ paper.file.name }}</a>
     &nbsp; &nbsp; &nbsp; &nbsp;
     <small>[<a href="{{ paper.file.url }}">Get file</a>]</small>
+    {% endif %}
     <div class="paper_text">{{ paper.text | truncatewords:50 }}
     </div>
     {% endfor %}

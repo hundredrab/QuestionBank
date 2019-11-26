@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>QuestionBank | {% block title %}</title>
+    <title>QMark | {% block title %}{% endblock %}</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     {% load static %}
@@ -30,14 +30,14 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="/">
-            QuestionBank
+            QMark
           </a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav">
             {% comment %}<li class="active"><a href="#">Home</a></li>{% endcomment %}
             <li><a href="/question/upload">Upload</a></li>
-            <li><a href="#">About Us</a></li>
+            <li><a href="{% url 'questions:set_list' %}">My Sets</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li>
@@ -70,4 +70,3 @@
       {% endblock %}
   </body>
 </html>
-{% endblock %}

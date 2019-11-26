@@ -1,0 +1,75 @@
+{% extends 'questions/base.html' %}
+{% block title %}
+Question Set {{ qset.id }}
+{% endblock %}
+
+{% block styles %}
+<style>
+h1 {
+  color: gray;
+}
+h1 span {
+  color: black;
+}
+.question {
+  background: rgba(0, 0, 0, .15);
+  padding: 10px;
+  margin: 10px;
+}
+.tags {
+  margin-top: -10px;
+  margin-left: 10px;
+}
+.tags div{
+  border: 1px solid gray;
+  padding: 0;
+  text-align: center;
+}
+.question .marks {
+  border: 1px dashed black;
+    padding: 6px 0;
+  text-align: center;
+}
+
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <h1>
+    Question Set
+    <span>
+      {% if object.name %}
+      {{ object.name }}
+      {% else %}
+      [Unnamed]
+      {% endif %}
+    </span>
+  </h1>
+  {% for question in object.questions.all %}
+  <div class='question row'>
+    <div class="text col-sm-11">
+      {{ question.text | linebreaks }}
+    </div>
+    {% if question.difficult %}
+    <div class="marks col-sm-1">
+      {{ question.difficulty }}
+    </div>
+    {% else %}
+    <div class="marks col-sm-1">
+      1
+    </div>
+    {% endif %}
+  </div>
+  <div class='tags row'>
+    {% for tag in question.tags.all %}
+    <div class='col-sm-1'>
+      {{ tag }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

@@ -1,60 +1,155 @@
 {% extends 'questions/base.html' %}
+{% block title %}
+Question Set {{ qset.id }}
+{% endblock %}
 
 {% block styles %}
-    <style type="text/css" media="screen">
+<style type="text/css" media="screen">
 .add-set {
-    float:right;
-        margin-top: -40px;
+  float:right;
+  margin-top: -40px;
 }
-    </style>
-    {% endblock %}
+
+.tags {
+  text-align: right;
+    margin-right: 10px;
+}
+.tags div {
+  float: right;
+  border: 1px solid gray;
+    padding: 0;
+      text-align: center;
+}
+
+.nocare {
+  background: white;
+}
+
+.whitelisted {
+  background: lightgreen;
+}
+
+.blacklisted {
+  background: pink;
+}
+
+.hider {
+  font-size: 10px;
+  float: right;
+}
+
+div.hid {
+  display: none;
+}
+
+#taglist .nocare:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+</style>
+{% endblock %}
 {% block content %}
 <div class="container-fluid">
+  <div id="taglist" class="col-sm-2">
+    {% include "questions/tag.html" with tag_list=root.children.all %}
+  </div>
 
-    <div id='app' class="col-sm-7">
-        {% verbatim %}
+  <div id='app' class="col-sm-5">
+    {% verbatim %}
 
-        <form class="form-group">
-            <input class="form-control" placeholder="Search for questions." v-model="text">
-            <input class="form-control" placeholder="Add tags to search" v-model="whitelist">
-            <input class="form-control" placeholder="Blacklist tags to not search in" v-model="blacklist">
-        </form>
-        <div id="status" class="name">
-            {{ status }}
-        </div>
-        <div v-for="(question, resKey) in questions" class="question">
-            <div class="text">
-                <pre>{{ question.text }} 
-                </pre>
-            </div>
-            <button class="btn btn-info add-set" @click="addToSet(question.id)">Add</button>
-            <div class="marks">
-                {{ question.difficulty }}
-            </div>
-        </div>
-        {% endverbatim %}
+    <form class="form-group">
+      <input class="form-control" placeholder="Search for questions." v-model="text">
+      <input class="form-control" placeholder="Add tags to search" id="whitelist" v-model="whitelist" readonly=True>
+      <input class="form-control" placeholder="Blacklist tags to not search in" id="blacklist" v-model="blacklist" readonly=True>
+    </form>
+    <div id="status" class="name">
+      {{ status }}
     </div>
-
-    <div class="col-sm-5">
-        Question set {{ qset.id }} of marks {{ qset.total_marks }} curently has {{ qset.questions.count }} question{{ qset.questions.count | pluralize }}.
-        <div id="show">
-            {% verbatim %}
-            {{ status }}
-            <div class="question" v-for="question in qset.questions">
-                <br>
-                <br>
-                {{ question.text }}
-            </div>
-            {% endverbatim %}
-        </div>
+    <div v-for="(question, resKey) in questions" class="question">
+      <div class="text">
+        <pre>{{ question.text }} 
+        </pre>
+      </div>
+      <button class="btn btn-info add-set" @click="addToSet(question.id)">Add</button>
+      <div class="marks">
+        {{ question.difficulty }}
+      </div>
     </div>
+    {% endverbatim %}
+  </div>
+
+  <div class="col-sm-5">
+    <div id="show">
+      {% verbatim %}
+      Question set {{ qset.id }} currently has {{ qset.questions.length }} question(s).
+      <div class="question" v-for="question in qset.questions">
+        <br>
+        <br>
+        {{ question.text }}
+      </div>
+      {% endverbatim %}
+    </div>
+  </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 {% load static %}
 <script src="{% static 'js/main.js' %}"></script>
-    <script>
-        let id = {{ qset.id }}
-    </script>
+<script>
+  let id = {{ qset.id }};
+
+  $('.hider').click(function(e){
+    e.stopPropagation()
+    $(this).parent().children().toggleClass('hid')
+    this.innerHTML = this.innerHTML == '(show)' ? '(hide)' : '(show)'
+  })
+
+  $('#taglist div').click(function(e){
+    tag = this.getAttribute('tagName');
+    wl = $('#whitelist')
+    bl = $('#blacklist')
+    e.stopPropagation()
+    if (this.className == 'nocare')
+    {
+      {% comment %}alert('nocare to wl'){% endcomment %}
+      $(this).toggleClass('nocare')
+      $(this).toggleClass('whitelisted')
+      curr = wl.val()
+      if (curr.length>0)
+        curr += ', '
+      curr += tag
+      curr = curr.replace(", ,", ",")
+      wl.val(curr)
+    }
+    else if (this.className == 'whitelisted'){
+      $(this).toggleClass('blacklisted')
+      $(this).toggleClass('whitelisted')
+      curr = wl.val()
+      curr = curr.replace(tag, "");
+      curr = curr.replace(", ,", ",");
+      wl.val(curr)
+
+      curr = bl.val()
+      if (curr.length>0){
+        curr += ', '
+      }
+      bl.val(curr + tag);
+    }
+    else if (this.className == 'blacklisted'){
+      $(this).toggleClass('blacklisted')
+      $(this).toggleClass('nocare')
+      curr = bl.val()
+      curr = curr.replace(tag, "");
+      curr = curr.replace(", ,", ",")
+      bl.val(curr)
+    }
+    else {
+      alert("something went wrong")
+    }
+    app.blacklist = bl.val()
+    app.whitelist = wl.val()
+  });
+
+</script>
 {% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>QMark</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/third-party/bootstrap-3.4.0.min.css' %}"/>
+    <script src="{% static 'js/third-party/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'js/third-party/bootstrap-3.4.0.min.js' %}"></script>
+    <script src="{% static 'js/third-party/axios.min.js' %}"></script>
+    <script src="{% static 'js/third-party/lodash.min.js' %}"></script>
+    <script src="{% static 'js/third-party/vue.js' %}"></script>
+
+    
+<link href="https://fonts.googleapis.com/css?family=Sigmar+One|Muli|Playfair+Display|Chewy|Trade+Winds&display=swap" rel="stylesheet">
+
+
+
+
+
+    <!--<link href="css/mdb.min.css" rel="stylesheet">-->
+    <link href="{% static 'css/main.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/index.css' %}" rel="stylesheet"/>
+  </head>
+  <body>
+
+    <main>
+      <div id="top" class="cover">
+        <div id="title" class="overlay">
+          <h1><span class='q'>Q</span>Mark</h1>
+          <div class="tagline">Your own question bank</div>
+        </div>
+      </div>
+
+      <div id="instruct" class="cover">
+        <div class="overlay">
+          <div class="target">
+              <h2> For instructors</h2>
+          </div>
+          <div class="features">
+            <ul>
+              <li>Store all your question papers in a centralized server.</li>
+              <li>Tag and easily search through all questions.</li>
+              <li>Rapidly create and edit question papers and sets.</li>
+            </ul>
+            <div class="started_parent">
+            <a href="{% url 'questions:upload' %}">
+            <div class="started">
+              Get started
+            </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="aspire" class="cover">
+        <div class="overlay">
+          <div class="target">
+              <h2> For aspirants</h2>
+          </div>
+          <div class="features">
+            <ul>
+              <li>Quickly access past questions made available.</li>
+              <li>Easily test your understanding on multiple granularity levels.</li>
+              <li>Create and share mock test sets.</li>
+            </ul>
+            <div class="started_parent">
+            <a href="{% url 'questions:set_create' %}">
+            <div class="started">
+              Get started
+            </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div style="background-color: #2a2c05; text-align:center; color: #EFE0B9;">
+        <span>TTFKAH &copy; 2019</span>
+        <span>Contact</span>
+        <span>Registration</span>
+      </div>
+      {% block scripts %}
+      {% endblock %}
+  </body>
+</html>
