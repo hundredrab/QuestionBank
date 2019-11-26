@@ -7,7 +7,14 @@ from django.urls import reverse
 
 
 class Tag(models.Model):
-    """Model for storing tag and related info."""
+    """
+    Model for storing tag and related info.
+
+    This model stores information related to tags.
+    Each node, except the root node has a parent associated with it.
+    The immediate children of the root node are major subject areas such as
+    Science, Humanities, etc.
+    """
     name = models.CharField(max_length=30)
     parent = models.ForeignKey('self',
                                related_name='children',
@@ -63,7 +70,7 @@ class QuestionSet(models.Model):
                               null=True, blank=True)
     name = models.CharField(max_length=30, blank=True, null=True,
                             help_text="Enter a name of your choice")
-    passcode = models.CharField(max_length=5, blank=True, null=True, 
+    passcode = models.CharField(max_length=5, blank=True, null=True,
                                 help_text="Use this if you want this to be accesssible to only people who have this passcode.")
     start_time = models.DateTimeField(blank=True, null=True,
                                       help_text="Use this if you want this to be accessible only after a certain time.")
