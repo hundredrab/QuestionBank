@@ -23,7 +23,13 @@ urlpatterns = [
     path('search/<int:pk>',
          views.SearchView.as_view(),
          name='search_view'),
+    path('set/<int:pk>/<passcode>',
+         views.SetDetail.as_view(),
+         name='set_detail'),
     path('set/',
          views.QuestionSetCreate.as_view(),
          name='set_create'),
+    path('sets/',
+         views.QuestionSetList.as_view(),
+         name='set_list'),
 ]

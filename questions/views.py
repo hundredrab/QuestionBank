@@ -3,11 +3,12 @@ Web views for the Question app.
 """
 import fitz
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.crypto import get_random_string
 from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
 
 from .forms import QuestionForm
 from .models import Question, QuestionPaper, QuestionSet, Tag
@@ -118,10 +119,29 @@ class SearchView(LoginRequiredMixin, View):
             'root': root,
         }
         if qset.owner == self.request.user:
-            pass
-        return render(request, 'questions/index.html', context)
-        # TODO: Handle user not having permissions.
-        return None
+            return render(request, 'questions/index.html', context)
+        # return redirect(
+
+class SetDetail(DetailView):
+    model = QuestionSet
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(self.model, id=self.kwargs['pk'])
+        print(obj)
+        print(obj.passcode)
+        if obj.passcode is not None:
+            return get_object_or_404(self.model, id=self.kwargs['pk'], passcode=self.kwargs['passcode'])
+        else:
+            return obj
+
+    # def get_context_data(self, **kwargs):
+        # context = super(QuestionPaperDetail, self).get_context_data(**kwargs)
+        # root = Tag.objects.get(name='root')
+        # context['root'] = root
+        # return context
+
+
+
 
 class QuestionSetCreate(LoginRequiredMixin, CreateView): # pylint: disable=too-many-ancestors
     """
@@ -129,3 +149,16 @@ class QuestionSetCreate(LoginRequiredMixin, CreateView): # pylint: disable=too-m
     """
     model = QuestionSet
     fields = ['name', 'passcode', 'start_time', 'end_time']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class QuestionSetList(ListView): # pylint: disable=too-many-ancestors
+    """
+    Return list of all sets created by the user.
+    """
+    model = QuestionSet
+
+    def get_queryset(self):
+        return self.model.objects.filter(owner=self.request.user)
