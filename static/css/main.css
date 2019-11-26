@@ -1,5 +1,5 @@
 .navbar-default {
-  background-color: #4285f4;
+  background-color: #643b0f;
   border-color: #2c5ca8; }
   .navbar-default .navbar-brand {
     color: #ffffff; }
@@ -12,7 +12,7 @@
     .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
       color: #fff; }
   .navbar-default .navbar-nav > li > .dropdown-menu {
-    background-color: #4285f4; }
+    background-color: #643b0f; }
     .navbar-default .navbar-nav > li > .dropdown-menu > li > a {
       color: #ffffff; }
       .navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover, .navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
@@ -48,19 +48,6 @@
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
     color: #fff;
     background-color: #2c5ca8; } }
-main .box__dragndrop,
-main .box__uploading,
-main .box__success,
-main .box__error {
-  display: none; }
-main .is-dragover {
-  background-color: grey;
-  border: 5px solid red; }
-main .has-advanced-upload {
-  outline: 2px dashed black;
-  outline-offset: 0px; }
-  main .has-advanced-upload .box__dragndrop {
-    display: inline; }
 main #status {
   margin-bottom: 20px; }
 main #results .card {
