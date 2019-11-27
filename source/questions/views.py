@@ -125,6 +125,7 @@ class SearchView(LoginRequiredMixin, View):
         # return redirect(
 
 class SetDetail(DetailView):
+    """Get the details of the set."""
     model = QuestionSet
 
     def get_object(self, queryset=None):
@@ -153,6 +154,8 @@ class QuestionSetCreate(LoginRequiredMixin, CreateView): # pylint: disable=too-m
     fields = ['name', 'passcode', 'start_time', 'end_time']
 
     def form_valid(self, form):
+        """Override form validation; add owner of set."""
+
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
