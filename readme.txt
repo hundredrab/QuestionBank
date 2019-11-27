@@ -26,7 +26,7 @@ Requires virtualenv, python3.
     # Alternatively:
     # git clone https://github.com/hundredrab/QuestionBank
 
-    cd QuestionBank
+    cd QuestionBank/source
 
     # Create and source a new virtualenv
     virtualenv -p python3 env
