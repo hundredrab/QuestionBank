@@ -80,7 +80,6 @@ class AddQuestionToPaper(View):
         """
         text = request.POST['text']
         difficulty = request.POST.get('difficulty')
-        # TODO: Handle difficulty/marks in both form and here
         tags = request.POST.get('tags')
         paper = QuestionPaper.objects.get(pk=pk)
         paper.tag_str = tags
@@ -154,7 +153,7 @@ class QuestionSetCreate(LoginRequiredMixin, CreateView): # pylint: disable=too-m
     fields = ['name', 'passcode', 'start_time', 'end_time']
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        form.instance.owner = self.request.user
         return super().form_valid(form)
 
 class QuestionSetList(ListView): # pylint: disable=too-many-ancestors
